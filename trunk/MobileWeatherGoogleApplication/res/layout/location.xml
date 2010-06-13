@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+android:id="@+id/main"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+<LinearLayout
+android:id="@+id/insidemain"
+android:layout_width="320px"
+android:layout_height="430px"
+android:orientation="vertical"
+>
+<TextView
+android:id="@+id/title"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Select your location for search and then click OK: "
+>
+</TextView>
+<Button
+android:id="@+id/okButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="OK"
+>
+</Button>
+<com.google.android.maps.MapView
+android:id="@+id/mapview"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:enabled="true"
+android:clickable="true"
+android:apiKey="0UXJpSesbNCveAWkzzK_BCl7fqaHmh5zP9rYjwA"/>
+</LinearLayout>
+</LinearLayout>
