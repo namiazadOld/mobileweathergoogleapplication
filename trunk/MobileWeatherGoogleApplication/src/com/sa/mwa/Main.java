@@ -31,6 +31,14 @@ public class Main extends Activity {
 	private EditText edt_location;
 	private Login dlg_login;
 	private Configuration dlg_configuration;
+	
+	private void initializeGPSListener()
+	{
+		LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		GPSLocationListener mlocListener = new GPSLocationListener(mlocManager, handler, peerServiceConnection);
+		mlocListener.register();
+		
+	}
 
 	private void establishServiceConnection() {
 		// listeners for peer service
@@ -157,31 +165,9 @@ public class Main extends Activity {
 
 		// initializing environment parameters
 		initializeEnvironmentParameter();
-
-		LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		MyLocationListener mlocListener = new MyLocationListener(mlocManager);
-		mlocListener.Register();
-//		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-//				mlocListener);
-
-		// LocationManager l =(LocationManager)
-		// getSystemService(Context.LOCATION_SERVICE);
-		// List<String> li = l.getProviders(true);
-		// // String li = l.getProviders(true).get(0);
-		// for (Iterator<String> iterator = li.iterator(); iterator.hasNext();)
-		// {
-		// String string = iterator.next();
-		// Log.d("gps", string);
-		// }
-		// if (l.getLastKnownLocation("gps")==null)
-		// Log.d("gps", "null");
-		// else {
-		// String location = (l.getLastKnownLocation("gps").getLatitude() + ","
-		// + l.getLastKnownLocation("gps").getLongitude()).toString();
-		//        
-		//        
-		// lbl_location.setText(location);
-		// }
+		
+		//TODO: This code should be moved to peerService. Due to technical problem it is here! This code should be done in this thread
+		initializeGPSListener();
 	}
 
 	@Override
@@ -237,8 +223,8 @@ public class Main extends Activity {
 			}
 				break;
 			case PeerService.GPS_LOCATION_CHANGED: {
-				Toast.makeText(getBaseContext(), (String) msg.obj,
-						Toast.LENGTH_LONG).show();
+				SimpleLocation location = (SimpleLocation) msg.obj;
+				lbl_location.setText((location.longitude + "," + location.latitude).toString());
 			}
 				break;
 			default:
@@ -253,57 +239,6 @@ public class Main extends Activity {
 				String pointer = data.getStringExtra("pointer");
 				edt_location.setText(pointer);
 			}
-		}
-	}
-
-	public class MyLocationListener implements LocationListener {
-		private Location _lastKnownLocation = null;
-		private LocationManager _locationManager = null;
-
-		public MyLocationListener(LocationManager locationManager)
-		{
-			this._locationManager = locationManager;
-		}
-		
-		@Override
-		public void onLocationChanged(Location loc) {
-//			String location = (loc.getLatitude() + "," + loc.getLongitude())
-//					.toString();
-//			handler.sendMessage(handler.obtainMessage(
-//					PeerService.GPS_LOCATION_CHANGED, location));
-			
-			if (loc != null)
-			{
-				synchronized (this) {
-					_lastKnownLocation = loc;
-				}
-			}
-		}
-
-		public Location getLastKnownValue() {
-			synchronized (this) {
-				return _lastKnownLocation;
-			}
-		}
-
-		@Override
-		public void onProviderDisabled(String provider) {
-			// lbl_location.setText("Gps Disabled");
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-			// lbl_location.setText("Gps Enabled");
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-
-		}/* End of Class MyLocationListener */
-		
-		public void Register() {
-			_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-			
 		}
 	}
 }

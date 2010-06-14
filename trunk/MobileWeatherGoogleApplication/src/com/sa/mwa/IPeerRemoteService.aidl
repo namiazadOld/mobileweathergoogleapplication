@@ -12,4 +12,7 @@ interface IPeerRemoteService
 	void disconnect();
 	float findWeather(String destination);
 	void settings(String deviceName, int refreshRate);
+	double retrieveLongitude();
+	double retrieveLatitude();
+	void cacheLocation(double longitude, double latitude);
 }

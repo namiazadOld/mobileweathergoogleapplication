@@ -4,10 +4,7 @@ import android.os.RemoteException;
 
 public class LogNotifyTemperatureChanged  extends INotifyValueChanged.Stub{
 
-	@Override
-	public void temperatureChanged(double value, double humidity) throws RemoteException {
-	}
-
+	
 	@Override
 	public void connectionEstablished() throws RemoteException {
 		
@@ -40,6 +37,19 @@ public class LogNotifyTemperatureChanged  extends INotifyValueChanged.Stub{
 
 	@Override
 	public void exceptionOccured(String message) throws RemoteException {
+		
+	}
+
+	@Override
+	public void gpsLocationChanged(double longitude, double latitude)
+			throws RemoteException {
+		
+	}
+
+	@Override
+	public void temperatureChanged(double value, double humidity,
+			double longitude, double latitude) throws RemoteException {
+		// TODO Auto-generated method stub
 		
 	}
 }
