@@ -12,7 +12,7 @@ public class GuiNotifyTemperatureChanged extends INotifyValueChanged.Stub
 	}
 	
 	@Override
-	public void temperatureChanged(double value, double humidity)
+	public void temperatureChanged(double value, double humidity, double longitude, double latitude)
 			throws RemoteException {
 		handler.sendMessage(handler.obtainMessage(PeerService.TEMPERATURE_MESSAGE, new Temperature(value, humidity)));
 	}
@@ -51,6 +51,12 @@ public class GuiNotifyTemperatureChanged extends INotifyValueChanged.Stub
 	@Override
 	public void exceptionOccured(String message) throws RemoteException {
 		handler.sendMessage(handler.obtainMessage(PeerService.EXCEPTION_OCCURED, message));
+	}
+
+	@Override
+	public void gpsLocationChanged(double longitude, double latitude)
+			throws RemoteException {
+		//handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(longitude, latitude)));		
 	}
 
 }
