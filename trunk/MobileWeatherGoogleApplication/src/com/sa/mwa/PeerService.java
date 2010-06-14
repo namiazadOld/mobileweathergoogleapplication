@@ -3,6 +3,7 @@ package com.sa.mwa;
 import android.app.Service;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
@@ -189,11 +190,9 @@ public class PeerService extends Service {
 		EnvironmentVariables.initalize(getBaseContext());
 
 		// This code should be here, but gps listener does not work on service.
-		// LocationManager mlocManager = (LocationManager)
-		// getSystemService(LOCATION_SERVICE);
-		// GPSLocationListener mlocListener = new
-		// GPSLocationListener(mlocManager);
-		// mlocListener.register();
+		 LocationManager mlocManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+		 GPSLocationListener mlocListener = new GPSLocationListener(mlocManager);
+		 mlocListener.register();
 		//		
 		// handler.sendEmptyMessage(GPS_LOCATION_CHANGED);
 	}

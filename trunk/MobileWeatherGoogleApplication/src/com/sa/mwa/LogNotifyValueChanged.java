@@ -2,7 +2,7 @@ package com.sa.mwa;
 
 import android.os.RemoteException;
 
-public class LogNotifyTemperatureChanged  extends INotifyValueChanged.Stub{
+public class LogNotifyValueChanged  extends INotifyValueChanged.Stub{
 
 	
 	@Override
