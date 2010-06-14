@@ -5,6 +5,9 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -154,6 +157,11 @@ public class Main extends Activity {
 		
 		//initializing environment parameters
 		initializeEnvironmentParameter();
+		
+		
+		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		LocationListener mlocListener = new MyLocationListener();
+		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 	}
 	
 	@Override
@@ -216,6 +224,11 @@ public class Main extends Activity {
 					Toast.makeText(getBaseContext(), (String) msg.obj, Toast.LENGTH_LONG).show();
 				}
 				break;
+				case PeerService.GPS_LOCATION_CHANGED:
+				{
+					Toast.makeText(getBaseContext(), (String) msg.obj, Toast.LENGTH_LONG).show();
+				}
+				break;
 				default:
 					super.handleMessage(msg);     
 			}   
@@ -230,9 +243,36 @@ public class Main extends Activity {
 	          { 
 	        	  String pointer =  data.getStringExtra("pointer");
 	        	  edt_location.setText(pointer);
-//	        	  goButton.setVisibility(0);
-//	        	  locationFinderButton.setVisibility(4);
 	          }
 	      }
-	  }
+	}
+	
+	public class MyLocationListener implements LocationListener
+	{
+		  @Override
+		  public void onLocationChanged(Location loc)
+		  {
+			  String location = (loc.getLatitude() + "," + loc.getLongitude()).toString();
+			  handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, location));
+			  lbl_location.setText(location);
+		  }
+		
+		  @Override
+		  public void onProviderDisabled(String provider)
+		  {
+			  //lbl_location.setText("Gps Disabled");
+		  }
+		
+		  @Override
+		  public void onProviderEnabled(String provider)
+		  {
+			  //lbl_location.setText("Gps Enabled");
+		  }
+		
+		  @Override
+		  public void onStatusChanged(String provider, int status, Bundle extras)
+		  {
+			  
+		  }/* End of Class MyLocationListener */
+	}
 }
