@@ -36,12 +36,8 @@ public class MobileWeatherGoogleApplication extends MapActivity {
     
    static final int GEOPOINT_SELECTED = 0;
  
-    
-    
     class MapOverlay extends com.google.android.maps.Overlay
     {
-        
-
         @Override
         public boolean onTouchEvent(MotionEvent event, MapView mapView) 
         {   
@@ -69,15 +65,15 @@ public class MobileWeatherGoogleApplication extends MapActivity {
                 Geocoder geoCoder = new Geocoder(
                     getBaseContext(), Locale.getDefault());
               //  List<Address> addresses = null;
-                try {
-                	add = (geoCoder.getFromLocation(
-                        (p.getLatitudeE6() /1E6 ), 
-                        (p.getLongitudeE6()/1E6), 1)).get(0).toString();   
-                   
-                }
-                catch (IOException e) {                
-                    e.printStackTrace();
-                }  
+//                try {
+//                	add = (geoCoder.getFromLocation(
+//                        (p.getLatitudeE6() /1E6 ), 
+//                        (p.getLongitudeE6()/1E6), 1)).get(0).toString();   
+//                   
+//                }
+//                catch (IOException e) {                
+//                    e.printStackTrace();
+//                }  
               
 //                if (addresses.size() > 0) 
 //                {

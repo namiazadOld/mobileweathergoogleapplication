@@ -27,4 +27,30 @@ public class GuiNotifyTemperatureChanged extends INotifyValueChanged.Stub
 		handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_FAILED));
 	}
 
+	@Override
+	public void connectionProcessing() throws RemoteException {
+		handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_PROCESSING));
+		
+	}
+
+	@Override
+	public void disconnected() throws RemoteException {
+		handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_DISCONNECTED));
+	}
+
+	@Override
+	public void queryResultReceived() throws RemoteException {
+		handler.sendMessage(handler.obtainMessage(PeerService.QUERY_RESULT));
+	}
+
+	@Override
+	public void queryReceived(String destination) throws RemoteException {
+		handler.sendMessage(handler.obtainMessage(PeerService.QUERY_MESSAGE, destination));
+	}
+
+	@Override
+	public void exceptionOccured(String message) throws RemoteException {
+		handler.sendMessage(handler.obtainMessage(PeerService.EXCEPTION_OCCURED, message));
+	}
+
 }
