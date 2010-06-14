@@ -69,20 +69,18 @@ public class PeerService extends Service {
 			case GPS_LOCATION_CHANGED: {
 				final int n = callBacks.beginBroadcast();
 				for (int i = 0; i < n; i++) {
-					location = (SimpleLocation) msg.obj;
-//					try {
-//						
-//						callBacks.getBroadcastItem(i).gpsLocationChanged(
-//								binder.retrieveLongitude(),
-//								binder.retrieveLatitude());
-//					} catch (RemoteException re) {
-//
-//					}
+					try {
+						location = new SimpleLocation(binder.retrieveLongitude(), binder.retrieveLatitude());
+						callBacks.getBroadcastItem(i).gpsLocationChanged(
+								location.getLongitude(),
+								location.getLatitude());
+					} catch (RemoteException re) {
+
+					}
 				}
 
 				callBacks.finishBroadcast();
-				// sendMessageDelayed(obtainMessage(GPS_LOCATION_CHANGED),
-				// 1000*EnvironmentVariables.getRefreshRate(getBaseContext()));
+				sendMessageDelayed(obtainMessage(GPS_LOCATION_CHANGED), 1000*EnvironmentVariables.getRefreshRate(getBaseContext()));
 			}
 				break;
 
@@ -190,11 +188,10 @@ public class PeerService extends Service {
 		EnvironmentVariables.initalize(getBaseContext());
 
 		// This code should be here, but gps listener does not work on service.
-		 LocationManager mlocManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-		 GPSLocationListener mlocListener = new GPSLocationListener(mlocManager);
-		 mlocListener.register();
-		//		
-		// handler.sendEmptyMessage(GPS_LOCATION_CHANGED);
+		LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		locationListener = new GPSLocationListener(mlocManager);
+		locationListener.register();
+		handler.sendEmptyMessage(GPS_LOCATION_CHANGED);
 	}
 
 	@Override
@@ -269,24 +266,17 @@ public class PeerService extends Service {
 
 		@Override
 		public double retrieveLatitude() throws RemoteException {
+			if (locationListener.getLastKnownValue() == null)
+				return 0;
 			return locationListener.getLastKnownValue().getLatitude();
 		}
 
 		@Override
 		public double retrieveLongitude() throws RemoteException {
+			if (locationListener.getLastKnownValue() == null)
+				return 0;
 			return locationListener.getLastKnownValue().getLongitude();
 		}
-
-		// If gps manager can be moved to peer service this method can be
-		// removed
-		@Override
-		public void cacheLocation(double longitude, double latitude)
-				throws RemoteException {
-			handler.sendMessage(handler.obtainMessage(
-					PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(
-							longitude, latitude)));
-		}
-
 	};
 
 }

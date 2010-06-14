@@ -56,7 +56,7 @@ public class GuiNotifyValueChanged extends INotifyValueChanged.Stub
 	@Override
 	public void gpsLocationChanged(double longitude, double latitude)
 			throws RemoteException {
-		//handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(longitude, latitude)));		
+		handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(longitude, latitude)));		
 	}
 
 }
