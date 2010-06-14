@@ -14,5 +14,4 @@ interface IPeerRemoteService
 	void settings(String deviceName, int refreshRate);
 	double retrieveLongitude();
 	double retrieveLatitude();
-	void cacheLocation(double longitude, double latitude);
 }

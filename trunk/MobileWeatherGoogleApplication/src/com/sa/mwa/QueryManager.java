@@ -48,7 +48,8 @@ public class QueryManager {
 					broadcastConnection.login(broadCastUsername, broadCastPassword);
 					
 					handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_ESTABLISHED));
-
+					
+					
 					
 					PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
 					connection.addPacketListener(new PacketListener() {

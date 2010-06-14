@@ -36,14 +36,14 @@ public class GPSLocationListener implements LocationListener {
 			}
 		}
 		
-		if (connector != null && connector.getRemoteService() != null)
-			try {
-				connector.getRemoteService().cacheLocation(loc.getLongitude(), loc.getLatitude());
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+//		if (connector != null && connector.getRemoteService() != null)
+//			try {
+//				connector.getRemoteService().cacheLocation(loc.getLongitude(), loc.getLatitude());
+//			} catch (RemoteException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		
 		if (handler != null)
 			handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(loc.getLongitude(), loc.getLatitude())));
 		
