@@ -16,9 +16,10 @@ public class QueryManager {
 	private XMPPConnection broadcastConnection;
 	private XMPPConnection connection;
 	private Handler handler;
-	private final String broadCastUsername = "android_broadcast";
-	private final String broadCastPassword = "intermilan";
+	private final String broadCastUsername = "all_mwa_users";
+	private final String broadCastPassword = "Intermilan1";
 	private final String chatDomain = "jabber.org";
+	private String username;
 	
 	public QueryManager(Handler handler)
 	{
@@ -27,6 +28,7 @@ public class QueryManager {
 	
 	public void connectToChatServer(final String username, final String password)
 	{
+		this.username = username;
 		Thread thread = new Thread(new Runnable() {
 			
 			@Override
@@ -48,6 +50,7 @@ public class QueryManager {
 					broadcastConnection.login(broadCastUsername, broadCastPassword);
 					
 					handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_ESTABLISHED));
+					
 					
 					
 					
@@ -81,10 +84,13 @@ public class QueryManager {
 		});
 		
 		thread.start();
+		
+		
 	}
 	
 	public void disconnectFromChatServer()
 	{
+		this.username = null;
 		Thread thread = new Thread(new Runnable() {
 			
 			@Override
@@ -98,23 +104,24 @@ public class QueryManager {
 		thread.start();
 	}
 	
-	public float findWeather(final String destination) throws CustomException
+	public void findWeather(double longitude, double latitude, int duration, int radius) throws CustomException
 	{
 		if (connection == null || broadcastConnection == null || !connection.isConnected() || !broadcastConnection.isConnected())
 			throw new CustomException(CustomException.CONNECTION_FAILED);
 		
+		if (this.username == null)
+			throw new CustomException(CustomException.CONNECTION_FAILED);
+		
+		final String content = (username + "-" + longitude + "-" + latitude + "-" + duration + "-" + radius).toString();
 		Thread thread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				Message msg = new Message(broadCastUsername + "@" + chatDomain, Message.Type.chat);
-				msg.setBody(destination);
+				msg.setBody(content);
 				broadcastConnection.sendPacket(msg);
 			}
 		});
-		
-		
 		thread.start();
-		return 12;
 	}
 }

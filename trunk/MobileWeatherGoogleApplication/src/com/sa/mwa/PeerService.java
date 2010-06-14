@@ -12,9 +12,9 @@ import android.os.RemoteException;
 public class PeerService extends Service {
 
 	private final RemoteCallbackList<INotifyValueChanged> callBacks = new RemoteCallbackList<INotifyValueChanged>();
-	TemperatureSensorListener temperatureSensorListener;
-	GPSLocationListener locationListener;
-	QueryManager queryManager;
+	private TemperatureSensorListener temperatureSensorListener;
+	private GPSLocationListener locationListener;
+	private QueryManager queryManager;
 
 	public static final int TEMPERATURE_MESSAGE = 1;
 	public static final int QUERY_MESSAGE = 2;
@@ -246,15 +246,13 @@ public class PeerService extends Service {
 		}
 
 		@Override
-		public float findWeather(String destination) throws RemoteException {
+		public void findWeather(double longitude, double latitude, int duration, int radius) throws RemoteException {
 			try {
-				return queryManager.findWeather(destination);
+				queryManager.findWeather(longitude, latitude, duration, radius);
 			} catch (CustomException e) {
 				handler.sendMessage(handler.obtainMessage(
 						PeerService.EXCEPTION_OCCURED, e.getDefaultMessage()));
 			}
-
-			return -1;
 		}
 
 		@Override

@@ -10,7 +10,7 @@ interface IPeerRemoteService
 	void unregisterCallBack(INotifyValueChanged ntc);
 	void establishConnection(String username, String password);
 	void disconnect();
-	float findWeather(String destination);
+	void findWeather(double longitude, double latitude, int duration, int radius);
 	void settings(String deviceName, int refreshRate);
 	double retrieveLongitude();
 	double retrieveLatitude();

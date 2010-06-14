@@ -166,7 +166,7 @@ android:textSize="12sp"
 >
 </EditText>
 <Button
-android:id="@+id/widget3348"
+android:id="@+id/btn_go"
 android:layout_width="wrap_content"
 android:layout_height="36px"
 android:text="Go..."
