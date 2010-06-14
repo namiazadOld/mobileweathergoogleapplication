@@ -3,10 +3,10 @@ package com.sa.mwa;
 import android.os.Handler;
 import android.os.RemoteException;
 
-public class GuiNotifyTemperatureChanged extends INotifyValueChanged.Stub
+public class GuiNotifyValueChanged extends INotifyValueChanged.Stub
 {
 	private Handler handler;
-	public GuiNotifyTemperatureChanged(Handler handler)
+	public GuiNotifyValueChanged(Handler handler)
 	{
 		this.handler = handler;
 	}

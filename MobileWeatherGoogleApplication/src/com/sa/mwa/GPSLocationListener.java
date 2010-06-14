@@ -18,6 +18,10 @@ public class GPSLocationListener implements LocationListener {
 		this.handler = handler;
 		this.connector = connector;
 	}
+	
+	public GPSLocationListener(LocationManager locationManager) {
+		this._locationManager = locationManager;
+	}
 
 	@Override
 	public void onLocationChanged(Location loc) {
@@ -32,7 +36,7 @@ public class GPSLocationListener implements LocationListener {
 			}
 		}
 		
-		if (connector.getRemoteService() != null)
+		if (connector != null && connector.getRemoteService() != null)
 			try {
 				connector.getRemoteService().cacheLocation(loc.getLongitude(), loc.getLatitude());
 			} catch (RemoteException e) {
@@ -40,7 +44,8 @@ public class GPSLocationListener implements LocationListener {
 				e.printStackTrace();
 			}
 		
-		handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(loc.getLongitude(), loc.getLatitude())));
+		if (handler != null)
+			handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(loc.getLongitude(), loc.getLatitude())));
 		
 		
 	}

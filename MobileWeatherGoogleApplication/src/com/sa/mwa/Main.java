@@ -21,8 +21,8 @@ import android.widget.Toast;
 
 public class Main extends Activity {
 
-	private GuiNotifyTemperatureChanged guiListener;
-	private LogNotifyTemperatureChanged logListener;
+	private GuiNotifyValueChanged guiListener;
+	private LogNotifyValueChanged logListener;
 	private PeerServiceConnector peerServiceConnection;
 	private ConnectionStatus connectionStatus;
 
@@ -42,8 +42,8 @@ public class Main extends Activity {
 
 	private void establishServiceConnection() {
 		// listeners for peer service
-		guiListener = new GuiNotifyTemperatureChanged(handler);
-		logListener = new LogNotifyTemperatureChanged();
+		guiListener = new GuiNotifyValueChanged(handler);
+		logListener = new LogNotifyValueChanged();
 		List<INotifyValueChanged> listeners = new ArrayList<INotifyValueChanged>();
 		listeners.add(guiListener);
 		listeners.add(logListener);
@@ -167,7 +167,7 @@ public class Main extends Activity {
 		initializeEnvironmentParameter();
 		
 		//TODO: This code should be moved to peerService. Due to technical problem it is here! This code should be done in this thread
-		initializeGPSListener();
+		//initializeGPSListener();
 	}
 
 	@Override
