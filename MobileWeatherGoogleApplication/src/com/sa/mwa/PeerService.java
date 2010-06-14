@@ -23,6 +23,7 @@ public class PeerService extends Service{
 	public static final int QUERY_RESULT = 7;
 	public static final int EXCEPTION_OCCURED = 8;
 	public static final int SETTING_INVOKED = 9;
+	public static final int GPS_LOCATION_CHANGED = 10;
 
 	//PeerService introduces its own interface using this method.
 	@Override
