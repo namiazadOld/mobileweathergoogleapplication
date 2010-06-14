@@ -13,15 +13,19 @@ import android.os.Handler;
 
 public class QueryManager {
 
+	private XMPPConnection broadcastConnection;
 	private XMPPConnection connection;
 	private Handler handler;
+	private final String broadCastUsername = "android_broadcast";
+	private final String broadCastPassword = "intermilan";
+	private final String chatDomain = "jabber.org";
 	
 	public QueryManager(Handler handler)
 	{
 		this.handler = handler;
 	}
 	
-	public void connectToChatServer()
+	public void connectToChatServer(final String username, final String password)
 	{
 		Thread thread = new Thread(new Runnable() {
 			
@@ -31,23 +35,41 @@ public class QueryManager {
 				try 
 				{
 					
-					ConnectionConfiguration config = new ConnectionConfiguration("jabber.org", 5222, "jabber.org");
+					handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_PROCESSING));
+					
+					ConnectionConfiguration config = new ConnectionConfiguration(chatDomain, 5222, chatDomain);
+					
 					connection = new XMPPConnection(config);
 					connection.connect();
+					connection.login(username, password);
 					
-					connection.login("all_mwa_users", "Intermilan1");
+					broadcastConnection = new XMPPConnection(config);
+					broadcastConnection.connect();
+					broadcastConnection.login(broadCastUsername, broadCastPassword);
 					
 					handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_ESTABLISHED));
 
+					
 					PacketFilter filter = new MessageTypeFilter(Message.Type.chat);
 					connection.addPacketListener(new PacketListener() {
 						
 						@Override
 						public void processPacket(Packet packet) {
 								Message message = (Message)packet;
-								handler.sendMessage(handler.obtainMessage(PeerService.QUERY_MESSAGE, message.getBody().toString()));
+								handler.sendMessage(handler.obtainMessage(PeerService.QUERY_RESULT, message.getBody()));
 						}
 					}, filter);					
+					
+					
+					PacketFilter broadCastFilter = new MessageTypeFilter(Message.Type.chat);
+					broadcastConnection.addPacketListener(new PacketListener() {
+						
+						@Override
+						public void processPacket(Packet packet) {
+								Message message = (Message)packet;
+								handler.sendMessage(handler.obtainMessage(PeerService.QUERY_MESSAGE, message.getBody()));
+						}
+					}, broadCastFilter);
 					
 				} 
 				catch (XMPPException e) 
@@ -58,5 +80,40 @@ public class QueryManager {
 		});
 		
 		thread.start();
+	}
+	
+	public void disconnectFromChatServer()
+	{
+		Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+
+				connection.disconnect();
+				handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_DISCONNECTED));
+			}
+		});
+		
+		thread.start();
+	}
+	
+	public float findWeather(final String destination) throws CustomException
+	{
+		if (connection == null || broadcastConnection == null || !connection.isConnected() || !broadcastConnection.isConnected())
+			throw new CustomException(CustomException.CONNECTION_FAILED);
+		
+		Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Message msg = new Message(broadCastUsername + "@" + chatDomain, Message.Type.chat);
+				msg.setBody(destination);
+				broadcastConnection.sendPacket(msg);
+			}
+		});
+		
+		
+		thread.start();
+		return 12;
 	}
 }
