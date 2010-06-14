@@ -26,6 +26,7 @@ public class PeerService extends Service {
 	public static final int EXCEPTION_OCCURED = 8;
 	public static final int SETTING_INVOKED = 9;
 	public static final int GPS_LOCATION_CHANGED = 10;
+	public static final int QUERY_ANALYZED = 11;
 
 	private SimpleLocation location;
 
@@ -145,6 +146,17 @@ public class PeerService extends Service {
 				for (int i = 0; i < n; i++) {
 					try {
 						callBacks.getBroadcastItem(i).queryResultReceived();
+					} catch (RemoteException re) {
+
+					}
+				}
+			}
+				break;
+			case QUERY_ANALYZED: {
+				final int n = callBacks.beginBroadcast();
+				for (int i = 0; i < n; i++) {
+					try {
+						callBacks.getBroadcastItem(i).queryAnalyzed();
 					} catch (RemoteException re) {
 
 					}

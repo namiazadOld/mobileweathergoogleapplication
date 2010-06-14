@@ -84,4 +84,9 @@ public class LogNotifyValueChanged extends INotifyValueChanged.Stub {
 			}
 		}
 	}
+
+	@Override
+	public void queryAnalyzed() throws RemoteException {
+		
+	}
 }

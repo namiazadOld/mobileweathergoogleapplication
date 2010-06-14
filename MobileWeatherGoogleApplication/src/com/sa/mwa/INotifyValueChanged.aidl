@@ -11,4 +11,5 @@ interface INotifyValueChanged
 	void queryReceived(String content);
 	void exceptionOccured(String message);
 	void gpsLocationChanged(double longitude, double latitude);
+	void queryAnalyzed();
 }

@@ -6,9 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,14 +33,14 @@ public class Main extends Activity {
 	private PeerServiceConnector peerServiceConnection;
 	private ConnectionStatus connectionStatus;
 
-	private TextView lbl_temperature, lbl_location, lbl_status;
-	private Button btn_setting, btn_locationFinder;
+	private TextView lbl_temperature, lbl_location, lbl_status, lbl_queryStatus;
+	private Button btn_setting, btn_locationFinder, btn_go, btn_result;
 	private EditText edt_location, edt_radius, edt_duration;
 	private Login dlg_login;
 	private Configuration dlg_configuration;
-	private Button btn_go;
 	
 	private String currentLocation;
+	private int queryProcessedCount = 0;
 	
 	private void establishServiceConnection() {
 		// listeners for peer service
@@ -60,9 +64,14 @@ public class Main extends Activity {
 
 		lbl_status = (TextView) findViewById(R.id.lbl_status);
 		lbl_status.setOnClickListener(lbl_status_onClick);
+		
+		lbl_queryStatus = (TextView) findViewById(R.id.lbl_queryStatus);
 
 		btn_setting = (Button) findViewById(R.id.btn_setting);
 		btn_setting.setOnClickListener(btn_setting_onClick);
+		
+		btn_result = (Button) findViewById(R.id.btn_result);
+		btn_result.setOnClickListener(btn_result_onClick);
 
 		btn_locationFinder = (Button) findViewById(R.id.btn_locationFinder);
 		btn_locationFinder.setOnClickListener(btn_locationFinder_onClick);
@@ -91,8 +100,6 @@ public class Main extends Activity {
 			
 			//String locationText = edt_location.getText().toString();
 			String locationText = currentLocation;
-			Toast.makeText(getBaseContext(), locationText,
-					Toast.LENGTH_LONG).show();
 			if (locationText == null || locationText == "")
 			{
 				Toast.makeText(getBaseContext(), "Location is not selected",
@@ -139,6 +146,16 @@ public class Main extends Activity {
 					dlg_configuration.show();
 				}
 			});
+		}
+	};
+	
+	private Button.OnClickListener btn_result_onClick = new Button.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			Intent myIntent = new Intent(v.getContext(),
+					Result.class);
+			startActivity(myIntent);
 		}
 	};
 
@@ -231,8 +248,12 @@ public class Main extends Activity {
 			}
 				break;
 			case PeerService.QUERY_MESSAGE: {
-				String content = (String) msg.obj;
-				lbl_location.setText(content);
+				lbl_queryStatus.setText("    query received.");
+			}
+				break;
+			case PeerService.QUERY_ANALYZED: {
+				queryProcessedCount++;
+				lbl_queryStatus.setText("    " + queryProcessedCount + " query processed." );
 			}
 				break;
 			case PeerService.CONNECTION_TO_CHAT_SERVER_ESTABLISHED: {
@@ -263,6 +284,13 @@ public class Main extends Activity {
 			case PeerService.GPS_LOCATION_CHANGED: {
 				SimpleLocation location = (SimpleLocation) msg.obj;
 				lbl_location.setText((location.longitude + "," + location.latitude).toString());
+				
+				String x = LocationToLocationName(location);
+				if (x == null) {
+					lbl_location.setText((location.longitude + "," + location.latitude).toString());
+				} else {
+					lbl_location.setText(x);
+				}
 			}
 				break;
 			default:
@@ -279,5 +307,25 @@ public class Main extends Activity {
 				currentLocation = pointer;
 			}
 		}
+	}
+	
+	public String LocationToLocationName(SimpleLocation l) {
+
+		Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
+
+		try {
+			List<Address> addresses = geoCoder.getFromLocation(l.getLatitude(),
+					l.getLongitude(), 1);
+
+			String add = "";
+			if (addresses.size() > 0) {
+				for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex(); i++)
+					add += addresses.get(0).getAddressLine(i) + "\n";
+				return add;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

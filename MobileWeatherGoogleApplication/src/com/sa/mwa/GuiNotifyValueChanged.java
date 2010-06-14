@@ -59,4 +59,10 @@ public class GuiNotifyValueChanged extends INotifyValueChanged.Stub
 		handler.sendMessage(handler.obtainMessage(PeerService.GPS_LOCATION_CHANGED, new SimpleLocation(longitude, latitude)));		
 	}
 
+	@Override
+	public void queryAnalyzed() throws RemoteException {
+		handler.sendEmptyMessage(PeerService.QUERY_ANALYZED);
+		
+	}
+
 }
