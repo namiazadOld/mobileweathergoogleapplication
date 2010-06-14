@@ -173,6 +173,14 @@ android:text="Go..."
 android:textSize="12sp"
 >
 </Button>
+<Button
+android:id="@+id/btn_result"
+android:layout_width="wrap_content"
+android:layout_height="36px"
+android:text="View Result"
+android:textSize="12sp"
+>
+</Button>
 </TableLayout>
 <TableRow
 android:id="@+id/widget331"
@@ -185,6 +193,13 @@ android:id="@+id/lbl_status"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:text="Not Connected!"
+android:textSize="12sp"
+>
+</TextView>
+<TextView
+android:id="@+id/lbl_queryStatus"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
 android:textSize="12sp"
 >
 </TextView>

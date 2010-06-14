@@ -16,6 +16,14 @@
             </intent-filter>
         </activity>
         
+         <activity android:name=".Result"
+        android:label="@string/app_name">
+     		
+            <intent-filter>
+                <action android:name="android.intent.action.RESULT" />
+            </intent-filter>
+        </activity>
+        
         <activity android:name=".Main"
                   android:label="@string/app_name">
             <intent-filter>

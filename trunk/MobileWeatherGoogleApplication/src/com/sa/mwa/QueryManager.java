@@ -26,6 +26,11 @@ public class QueryManager {
 		this.handler = handler;
 	}
 	
+	public void analyzeQuery(String query)
+	{
+		
+	}
+	
 	public void connectToChatServer(final String username, final String password)
 	{
 		this.username = username;
@@ -72,6 +77,9 @@ public class QueryManager {
 						public void processPacket(Packet packet) {
 								Message message = (Message)packet;
 								handler.sendMessage(handler.obtainMessage(PeerService.QUERY_MESSAGE, message.getBody()));
+								analyzeQuery(message.getBody());
+								handler.sendMessage(handler.obtainMessage(PeerService.QUERY_ANALYZED));
+								
 						}
 					}, broadCastFilter);
 					
