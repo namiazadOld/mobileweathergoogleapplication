@@ -1,5 +1,8 @@
 package com.sa.mwa;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,22 +31,17 @@ public class Main extends Activity {
 
 	private TextView lbl_temperature, lbl_location, lbl_status;
 	private Button btn_setting, btn_locationFinder;
-	private EditText edt_location;
+	private EditText edt_location, edt_radius, edt_duration;
 	private Login dlg_login;
 	private Configuration dlg_configuration;
+	private Button btn_go;
 	
-	private void initializeGPSListener()
-	{
-		LocationManager mlocManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		GPSLocationListener mlocListener = new GPSLocationListener(mlocManager, handler, peerServiceConnection);
-		mlocListener.register();
-		
-	}
-
+	private String currentLocation;
+	
 	private void establishServiceConnection() {
 		// listeners for peer service
 		guiListener = new GuiNotifyValueChanged(handler);
-		logListener = new LogNotifyValueChanged();
+		logListener = new LogNotifyValueChanged(this);
 		List<INotifyValueChanged> listeners = new ArrayList<INotifyValueChanged>();
 		listeners.add(guiListener);
 		listeners.add(logListener);
@@ -68,9 +66,15 @@ public class Main extends Activity {
 
 		btn_locationFinder = (Button) findViewById(R.id.btn_locationFinder);
 		btn_locationFinder.setOnClickListener(btn_locationFinder_onClick);
+		
+		btn_go = (Button) findViewById(R.id.btn_go);
+		btn_go.setOnClickListener(btn_go_onClick);
 
 		edt_location = (EditText) findViewById(R.id.edt_location);
 		edt_location.setEnabled(false);
+		
+		edt_radius = (EditText) findViewById(R.id.edt_radius);
+		edt_duration = (EditText) findViewById(R.id.edt_duration);
 
 		dlg_login = new Login(this);
 		dlg_configuration = new Configuration(this);
@@ -79,19 +83,56 @@ public class Main extends Activity {
 	private void initializeEnvironmentParameter() {
 		connectionStatus = ConnectionStatus.Disconnected;
 	}
+	
+	private Button.OnClickListener btn_go_onClick = new Button.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			
+			//String locationText = edt_location.getText().toString();
+			String locationText = currentLocation;
+			Toast.makeText(getBaseContext(), locationText,
+					Toast.LENGTH_LONG).show();
+			if (locationText == null || locationText == "")
+			{
+				Toast.makeText(getBaseContext(), "Location is not selected",
+						Toast.LENGTH_LONG).show();
+				return;
+			}
+			
+			String radiusText = edt_radius.getText().toString();
+			final int radius = Integer.parseInt(radiusText);
+			
+			String durationText = edt_duration.getText().toString();
+			final int duration = Integer.parseInt(durationText);
+			
+			String[] parts = locationText.split("\\,");
+			final double latitude = Double.parseDouble(parts[0]);
+			final double longitude = Double.parseDouble(parts[1]);
+			
+				
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						peerServiceConnection.getRemoteService().findWeather(longitude, latitude, duration, radius);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
+			thread.start();
+		}
+	};
 
 	private Button.OnClickListener btn_setting_onClick = new Button.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			try {
-				peerServiceConnection.getRemoteService().findWeather("DELFT");
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
-
 			handler.post(new Runnable() {
-
+				
 				@Override
 				public void run() {
 					dlg_configuration.Prepare(peerServiceConnection);
@@ -165,9 +206,6 @@ public class Main extends Activity {
 
 		// initializing environment parameters
 		initializeEnvironmentParameter();
-		
-		//TODO: This code should be moved to peerService. Due to technical problem it is here! This code should be done in this thread
-		//initializeGPSListener();
 	}
 
 	@Override
@@ -238,6 +276,7 @@ public class Main extends Activity {
 			if (resultCode == RESULT_OK) {
 				String pointer = data.getStringExtra("pointer");
 				edt_location.setText(pointer);
+				currentLocation = pointer;
 			}
 		}
 	}
