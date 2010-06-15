@@ -27,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Main extends Activity {
-
+	
+	//public static String[] results;
+	 public int counter=0;
 	private GuiNotifyValueChanged guiListener;
 	private LogNotifyValueChanged logListener;
 	private PeerServiceConnector peerServiceConnection;
@@ -167,9 +169,14 @@ public class Main extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			Intent myIntent = new Intent(v.getContext(),
-					Result.class);
-			startActivity(myIntent);
+			
+			Intent myIntent = new Intent(v.getContext(),Result.class);
+//			Bundle bundle = new Bundle();
+//			bundle.putStringArray("results", results);
+//			myIntent.putExtras(bundle);
+			startActivityForResult(myIntent, 0);
+		
+			
 		}
 	};
 
@@ -259,7 +266,20 @@ public class Main extends Activity {
 				break;
 			case PeerService.QUERY_RESULT: {
 				String content = (String) msg.obj;
-				lbl_status.setText(content);
+				ResultCache.contents.add(content);
+				
+//				results[counter]=content;
+				
+//				Bundle bundle = new Bundle();
+//				Intent myIntent = new Intent(v.getContext(),Result.class);
+//				bundle.putString("content",content);
+//				myIntent.putExtra("content",content);
+//				startActivityForResult(myIntent, 0);
+//		    	
+//		    	lbl_queryStatus.setText("content");
+//		    	onActivityResult(0,0,intent);
+//		        setResult(RESULT_OK, intent);
+		        
 			}
 				break;
 			case PeerService.QUERY_MESSAGE: {
