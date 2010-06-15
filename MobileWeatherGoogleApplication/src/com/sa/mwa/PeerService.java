@@ -220,9 +220,8 @@ public class PeerService extends Service {
 	public void onDestroy() {
 		temperatureSensorListener.unregisterListener();
 		handler.removeMessages(PeerService.TEMPERATURE_MESSAGE);
-
 		locationListener.stopListening();
-		super.onDestroy();
+		callBacks.kill();
 	}
 
 	// implementation of the interface that this service exposes
