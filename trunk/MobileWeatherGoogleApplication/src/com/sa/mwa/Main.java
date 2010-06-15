@@ -107,11 +107,25 @@ public class Main extends Activity {
 				return;
 			}
 			
-			String radiusText = edt_radius.getText().toString();
-			final int radius = Integer.parseInt(radiusText);
+			final int radius;
+			try {
+				String radiusText = edt_radius.getText().toString();
+				radius = Integer.parseInt(radiusText);
+			} catch (NumberFormatException nfe) {
+				Toast.makeText(getBaseContext(), "Radius should be an integer",
+						Toast.LENGTH_LONG).show();
+				return;
+			}
 			
-			String durationText = edt_duration.getText().toString();
-			final int duration = Integer.parseInt(durationText);
+			final int duration;
+			try {
+				String durationText = edt_duration.getText().toString();
+				duration = Integer.parseInt(durationText);
+			} catch (NumberFormatException nfe) {
+				Toast.makeText(getBaseContext(), "Duration should be an integer",
+						Toast.LENGTH_LONG).show();
+				return;
+			}
 			
 			String[] parts = locationText.split("\\,");
 			final double latitude = Double.parseDouble(parts[0]);
@@ -228,6 +242,7 @@ public class Main extends Activity {
 	@Override
 	protected void onDestroy() {
 
+		super.onDestroy();
 		if (peerServiceConnection != null)
 			unbindService(peerServiceConnection);
 	}
