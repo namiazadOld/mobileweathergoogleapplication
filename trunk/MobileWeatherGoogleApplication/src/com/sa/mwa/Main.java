@@ -243,10 +243,8 @@ public class Main extends Activity {
 			}
 				break;
 			case PeerService.QUERY_RESULT: {
-//				String content = (String) msg.obj;
-//				lbl_status.setText(content);
-				int i = 0;
-				i++;
+				String content = (String) msg.obj;
+				lbl_status.setText(content);
 			}
 				break;
 			case PeerService.QUERY_MESSAGE: {
