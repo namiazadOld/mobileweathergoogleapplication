@@ -133,6 +133,7 @@ public class Main extends Activity {
 			final double latitude = Double.parseDouble(parts[0]);
 			final double longitude = Double.parseDouble(parts[1]);
 			
+			ResultCache.clear();
 				
 			Thread thread = new Thread(new Runnable() {
 				

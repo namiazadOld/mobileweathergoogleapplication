@@ -74,7 +74,7 @@ public class Result extends Activity {
 			 LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		}else{
 
-		 for (int i = 0; i <= ResultCache.contents.size(); i++) {
+		 for (int i = 0; i < ResultCache.contents.size(); i++) {
 		
 		 /* Find Tablelayout defined in main.xml */
 		 TableLayout tl = (TableLayout) findViewById(R.id.resultTable);
