@@ -267,7 +267,10 @@ public class Main extends Activity {
 				break;
 			case PeerService.QUERY_RESULT: {
 				String content = (String) msg.obj;
-				ResultCache.add(content);				
+				
+				String[] parts = content.split("\\-");
+				String prettyPrint = parts[0] + ":" + " Min: " + parts[1] + " Max: " + parts[2] + " Avg: " + parts[3]; 				
+				ResultCache.add(prettyPrint);				
 			}
 				break;
 			case PeerService.QUERY_MESSAGE: {
