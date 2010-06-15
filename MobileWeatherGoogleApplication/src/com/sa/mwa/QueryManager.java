@@ -134,7 +134,7 @@ public class QueryManager {
             
             if (results.size() == 0)
             {
-            	handler.sendMessage(handler.obtainMessage(PeerService.QUERY_ANALYZED));
+            	handler.sendMessage(handler.obtainMessage(PeerService.QUERY_ANALYZED, ""));
             	return;
             }
 			
