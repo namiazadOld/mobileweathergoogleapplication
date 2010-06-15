@@ -1,4 +1,4 @@
-package com.sa.mwa;
+		package com.sa.mwa;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -266,8 +266,7 @@ public class Main extends Activity {
 				break;
 			case PeerService.QUERY_RESULT: {
 				String content = (String) msg.obj;
-				if(ResultCache.contents!=null)
-				ResultCache.contents .add(content);
+				ResultCache.add(content);
 				
 //				results[counter]=content;
 				
