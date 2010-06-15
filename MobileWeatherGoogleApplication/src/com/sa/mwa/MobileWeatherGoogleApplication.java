@@ -153,7 +153,7 @@ public class MobileWeatherGoogleApplication extends MapActivity {
     
     public void SetLocation(){
     	
-    	String x= (p.getLatitudeE6() / 1E6 + "," + p.getLongitudeE6()).toString();
+    	String x= (p.getLatitudeE6() / 1E6 + "," + p.getLongitudeE6()/ 1E6).toString();
     	Intent intent = new Intent();
     	//intent.EXTRA_CC = "GeoPoint://p;
     	intent.putExtra("pointer",x);

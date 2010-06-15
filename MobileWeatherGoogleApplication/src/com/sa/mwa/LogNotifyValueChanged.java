@@ -41,7 +41,7 @@ public class LogNotifyValueChanged extends INotifyValueChanged.Stub {
 	}
 
 	@Override
-	public void queryResultReceived() throws RemoteException {
+	public void queryResultReceived(String content) throws RemoteException {
 
 	}
 
@@ -64,6 +64,9 @@ public class LogNotifyValueChanged extends INotifyValueChanged.Stub {
 	@Override
 	public void temperatureChanged(double value, double humidity,
 			double longitude, double latitude) throws RemoteException {
+		
+		if (longitude == 0 && latitude == 0)
+			return;
 
 		synchronized (this) {
 			try {

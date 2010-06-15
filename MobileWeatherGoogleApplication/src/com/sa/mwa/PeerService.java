@@ -27,9 +27,10 @@ public class PeerService extends Service {
 	public static final int SETTING_INVOKED = 9;
 	public static final int GPS_LOCATION_CHANGED = 10;
 	public static final int QUERY_ANALYZED = 11;
+	public static final int QUERY_PROCESSING = 12;
 
 	private SimpleLocation location;
-
+	
 	// PeerService introduces its own interface using this method.
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -145,10 +146,12 @@ public class PeerService extends Service {
 				final int n = callBacks.beginBroadcast();
 				for (int i = 0; i < n; i++) {
 					try {
-						callBacks.getBroadcastItem(i).queryResultReceived();
+						callBacks.getBroadcastItem(i).queryResultReceived((String)msg.obj);
 					} catch (RemoteException re) {
 
 					}
+					
+					
 				}
 			}
 				break;
@@ -160,7 +163,14 @@ public class PeerService extends Service {
 					} catch (RemoteException re) {
 
 					}
+					
+					if (msg.obj != null)
+						queryManager.SendResult((QueryResult)msg.obj);
 				}
+			}
+				break;
+			case QUERY_PROCESSING: {
+				queryManager.analyzeQuery(getBaseContext(), (String)msg.obj);
 			}
 				break;
 			case EXCEPTION_OCCURED: {

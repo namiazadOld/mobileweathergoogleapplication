@@ -39,8 +39,8 @@ public class GuiNotifyValueChanged extends INotifyValueChanged.Stub
 	}
 
 	@Override
-	public void queryResultReceived() throws RemoteException {
-		handler.sendMessage(handler.obtainMessage(PeerService.QUERY_RESULT));
+	public void queryResultReceived(String content) throws RemoteException {
+		handler.sendMessage(handler.obtainMessage(PeerService.QUERY_RESULT, content));
 	}
 
 	@Override
