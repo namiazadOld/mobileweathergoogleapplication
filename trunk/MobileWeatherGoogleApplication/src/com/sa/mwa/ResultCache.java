@@ -12,7 +12,8 @@ public class ResultCache {
 		if (contents == null)
 			contents = new ArrayList<String>();
 		
-		contents.add(content);
+		if (!contents.contains(content))
+			contents.add(content);
 	}
 	
 	public static void clear()

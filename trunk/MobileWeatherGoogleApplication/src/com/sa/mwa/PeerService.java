@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.util.Log;
 
 public class PeerService extends Service {
 
@@ -163,8 +164,7 @@ public class PeerService extends Service {
 					} catch (RemoteException re) {
 
 					}
-					
-					if (msg.obj != null)
+					if (!msg.obj.equals(""))
 						queryManager.SendResult((QueryResult)msg.obj);
 				}
 			}

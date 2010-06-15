@@ -267,20 +267,7 @@ public class Main extends Activity {
 				break;
 			case PeerService.QUERY_RESULT: {
 				String content = (String) msg.obj;
-				ResultCache.add(content);
-				
-//				results[counter]=content;
-				
-//				Bundle bundle = new Bundle();
-//				Intent myIntent = new Intent(v.getContext(),Result.class);
-//				bundle.putString("content",content);
-//				myIntent.putExtra("content",content);
-//				startActivityForResult(myIntent, 0);
-//		    	
-//		    	lbl_queryStatus.setText("content");
-//		    	onActivityResult(0,0,intent);
-//		        setResult(RESULT_OK, intent);
-		        
+				ResultCache.add(content);				
 			}
 				break;
 			case PeerService.QUERY_MESSAGE: {
