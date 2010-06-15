@@ -24,6 +24,7 @@ public class Configuration extends Dialog{
 
 	private void uiElementInitializing()
 	{
+
 		btn_save = (Button) findViewById(R.id.btn_save);
 		btn_save.setOnClickListener(btn_save_onClick);
 		
