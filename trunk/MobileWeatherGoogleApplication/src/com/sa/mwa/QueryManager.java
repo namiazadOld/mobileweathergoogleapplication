@@ -226,6 +226,7 @@ public class QueryManager {
 			public void run() {
 
 				connection.disconnect();
+				broadcastConnection.disconnect();
 				handler.sendMessage(handler.obtainMessage(PeerService.CONNECTION_TO_CHAT_SERVER_DISCONNECTED));
 			}
 		});
