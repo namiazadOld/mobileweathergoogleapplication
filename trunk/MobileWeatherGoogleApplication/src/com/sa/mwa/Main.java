@@ -266,7 +266,8 @@ public class Main extends Activity {
 				break;
 			case PeerService.QUERY_RESULT: {
 				String content = (String) msg.obj;
-				ResultCache.contents.add(content);
+				if(ResultCache.contents!=null)
+				ResultCache.contents .add(content);
 				
 //				results[counter]=content;
 				
