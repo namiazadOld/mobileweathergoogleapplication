@@ -14,4 +14,10 @@ public class ResultCache {
 		
 		contents.add(content);
 	}
+	
+	public static void clear()
+	{
+		if (contents != null)
+			contents.clear();
+	}
 }
