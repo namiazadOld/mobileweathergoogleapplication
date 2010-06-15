@@ -7,7 +7,7 @@ interface INotifyValueChanged
 	void connectionFailed();
 	void connectionProcessing();
 	void disconnected();
-	void queryResultReceived();
+	void queryResultReceived(String content);
 	void queryReceived(String content);
 	void exceptionOccured(String message);
 	void gpsLocationChanged(double longitude, double latitude);

@@ -1,10 +1,12 @@
 package com.sa.mwa;
 
+import android.util.Log;
+
 import com.google.android.maps.GeoPoint;
 
 public class GeopointDistance {
 
-	public boolean IsResult(double latetude1, double longitude1,
+	public static boolean IsResult(double latetude1, double longitude1,
 			double latetude2, double longitude2, int radius) {
 
 		double deltaLatitude, deltaLongitude, latitudeCircumference, resultX, resultY;
@@ -16,13 +18,15 @@ public class GeopointDistance {
 		resultY = (deltaLatitude * 40008000) / 360;
 		double distance = Math.sqrt((resultX) * (resultX) + (resultY)
 				* (resultY));
-		if (distance <= radius)
+		
+//		Log.d("GeopointDistance", Double.toString(distance));
+		if (distance <= radius * 1000)
 			return true;
 		else
 			return false;
 	}
 
-	public double radians(double degree) {
+	public static double radians(double degree) {
 		double radians = (degree * Math.PI) / 180;
 		return radians;
 	}
